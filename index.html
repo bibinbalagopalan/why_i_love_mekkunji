@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7f8">
+<meta name="description" content="A little interactive love letter, made just for Mekkunjii.">
+<title>For Mekkunjii — 101 little reasons</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #321d2a;
+    --muted: #8d7582;
+    --rose: #e94e78;
+    --rose-deep: #c82f61;
+    --blush: #fff0f3;
+    --glass: rgba(255,255,255,.72);
+    --line: rgba(123, 46, 77, .10);
+    --shadow: 0 24px 80px rgba(111, 39, 70, .13);
+  }
+  * { box-sizing: border-box; }
+  html { min-height: 100%; background: #fff7f8; }
+  body {
+    margin: 0; min-height: 100svh; overflow-x: hidden; color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    background:
+      radial-gradient(ellipse at 12% 12%, rgba(255, 194, 209, .62), transparent 34%),
+      radial-gradient(ellipse at 90% 30%, rgba(244, 210, 235, .62), transparent 35%),
+      radial-gradient(ellipse at 55% 100%, rgba(255, 220, 226, .76), transparent 40%),
+      linear-gradient(145deg, #fff9fa 0%, #fff0f4 52%, #fff8fb 100%);
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; }
+  button:focus-visible { outline: 3px solid #e94e78; outline-offset: 4px; }
+  .ambient { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .ambient-heart {
+    position: absolute; bottom: -12vh; color: #ef7194; opacity: .12;
+    animation: drift linear infinite; user-select: none;
+  }
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0) rotate(-12deg); }
+    to { transform: translate3d(24px, -125vh, 0) rotate(25deg); }
+  }
+  .app { position: relative; z-index: 1; min-height: 100svh; display: flex; flex-direction: column; }
+  .topbar {
+    width: min(1180px, 100%); margin: 0 auto; padding: max(22px, env(safe-area-inset-top)) 26px 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .brand-mark {
+    width: 42px; height: 42px; display: grid; place-items: center; flex: 0 0 auto;
+    border-radius: 15px; color: white; font-size: 20px;
+    background: linear-gradient(145deg, #ff91ab, #dc3e70);
+    box-shadow: 0 8px 20px rgba(220, 62, 112, .24);
+  }
+  .brand-name { font-size: 14px; font-weight: 700; letter-spacing: -.025em; }
+  .brand-sub { color: var(--muted); font-size: 11px; margin-top: 3px; letter-spacing: .08em; text-transform: uppercase; }
+  .counter {
+    padding: 10px 14px; border: 1px solid rgba(255,255,255,.85); border-radius: 999px;
+    background: rgba(255,255,255,.64); box-shadow: 0 4px 18px rgba(90,30,55,.04);
+    color: #805267; font-size: 12px; white-space: nowrap; backdrop-filter: blur(18px);
+  }
+  .counter strong { color: var(--rose-deep); font-variant-numeric: tabular-nums; }
+  main { width: min(1180px, 100%); margin: 0 auto; padding: 22px 26px 28px; flex: 1; display: flex; flex-direction: column; }
+  .hero { text-align: center; padding: clamp(22px, 5vh, 52px) 0 20px; }
+  .eyebrow { color: var(--rose-deep); font-size: 11px; font-weight: 750; text-transform: uppercase; letter-spacing: .2em; }
+  h1 {
+    margin: 14px 0 12px; font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    font-weight: 500; font-size: clamp(42px, 7.5vw, 78px); letter-spacing: -.065em; line-height: .99;
+  }
+  h1 span { color: var(--rose); font-style: italic; }
+  .intro { max-width: 490px; margin: 0 auto; color: #8a6c7a; font-size: clamp(14px, 2vw, 16px); line-height: 1.7; }
+  .game-card {
+    position: relative; isolation: isolate; width: 100%; max-width: 900px; min-height: 330px; flex: 1;
+    margin: 16px auto 0; border: 1px solid rgba(255,255,255,.9); border-radius: 30px;
+    background: linear-gradient(145deg, rgba(255,255,255,.76), rgba(255,255,255,.42));
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.9);
+    backdrop-filter: blur(22px); overflow: hidden;
+  }
+  .game-card::before, .game-card::after {
+    content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(2px); pointer-events: none;
+  }
+  .game-card::before { width: 280px; height: 280px; top: -150px; right: -65px; background: rgba(255,190,207,.32); }
+  .game-card::after { width: 240px; height: 240px; bottom: -150px; left: -60px; background: rgba(232,187,223,.25); }
+  .card-top { position: absolute; inset: 22px 24px auto; display: flex; justify-content: space-between; align-items: center; color: #a38492; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #e6537e; margin-right: 7px; box-shadow: 0 0 0 4px rgba(230,83,126,.1); }
+  #heart-field { position: absolute; inset: 55px 0 48px; overflow: hidden; }
+  .hint {
+    position: absolute; left: 18px; right: 18px; bottom: 19px; text-align: center;
+    color: #a08090; font-size: 12px; pointer-events: none;
+  }
+  .hint b { color: #cf4a73; font-weight: 650; }
+  .game-heart {
+    position: absolute; display: grid; place-items: center; border: 0; padding: 0; background: transparent;
+    cursor: pointer; color: var(--heart-color); filter: drop-shadow(0 8px 9px rgba(197, 61, 101, .16));
+    animation: float-heart var(--duration) ease-in-out forwards; -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation; transition: filter .18s ease;
+  }
+  .game-heart svg { width: 100%; height: 100%; overflow: visible; }
+  .game-heart:hover { filter: drop-shadow(0 12px 15px rgba(197,61,101,.3)); }
+  .game-heart:active { transform: scale(.88); }
+  .game-heart.popping { animation: pop .26s ease-out forwards; pointer-events: none; }
+  @keyframes float-heart {
+    0% { transform: translateY(55px) rotate(var(--rot)); opacity: 0; }
+    12% { opacity: 1; }
+    85% { opacity: .96; }
+    100% { transform: translateY(-390px) rotate(calc(var(--rot) * -1)); opacity: 0; }
+  }
+  @keyframes pop { to { transform: scale(1.65); opacity: 0; } }
+  .progress-wrap { width: min(900px, 100%); margin: 17px auto 0; display: flex; align-items: center; gap: 13px; }
+  .progress-track { height: 5px; flex: 1; border-radius: 20px; background: rgba(193, 121, 149, .16); overflow: hidden; }
+  .progress-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f9a0b6, #d83c6d); transition: width .45s cubic-bezier(.2,.8,.2,1); }
+  .progress-label { color: #9a7c8a; font-size: 11px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  footer { text-align: center; color: #ad8e9c; font-size: 11px; padding: 18px 20px max(20px, env(safe-area-inset-bottom)); letter-spacing: .04em; }
+  .overlay {
+    position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px;
+    background: rgba(62, 25, 44, .24); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    opacity: 0; visibility: hidden; transition: opacity .28s ease, visibility .28s ease;
+  }
+  .overlay.active { opacity: 1; visibility: visible; }
+  .dialog {
+    position: relative; width: min(440px, 100%); padding: clamp(28px, 7vw, 46px) clamp(24px, 6vw, 42px);
+    border-radius: 30px; border: 1px solid rgba(255,255,255,.95);
+    background: linear-gradient(155deg, rgba(255,255,255,.98), rgba(255,246,249,.97));
+    box-shadow: 0 30px 100px rgba(76,24,49,.22); text-align: center;
+    transform: translateY(16px) scale(.97); transition: transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .overlay.active .dialog { transform: translateY(0) scale(1); }
+  .sparkle { color: #e66a8d; font-size: 18px; }
+  .reason-kicker { margin: 15px 0 12px; color: #c45c7d; font-size: 10px; text-transform: uppercase; letter-spacing: .22em; font-weight: 750; }
+  .reason-text { margin: 0 0 29px; color: #492637; font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; font-size: clamp(26px, 6vw, 34px); font-weight: 500; line-height: 1.27; letter-spacing: -.035em; }
+  .primary-btn {
+    border: 0; border-radius: 999px; min-height: 48px; padding: 0 24px; color: #fff; font-size: 13px; font-weight: 700;
+    background: linear-gradient(115deg, #f17b9b, #d63d6d); box-shadow: 0 9px 22px rgba(214,61,109,.25);
+    cursor: pointer; transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .primary-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(214,61,109,.32); }
+  .primary-btn:active { transform: scale(.98); }
+  .final-heart { font-size: 46px; animation: heartbeat 1.4s ease-in-out infinite; }
+  @keyframes heartbeat { 0%,100% { transform: scale(1); } 14% { transform: scale(1.12); } 28% { transform: scale(1); } 42% { transform: scale(1.08); } }
+  .final-title { font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; font-size: clamp(38px, 8vw, 54px); letter-spacing: -.055em; line-height: 1.03; margin: 15px 0; color: #c83264; font-weight: 500; }
+  .final-copy { color: #8b6a7a; line-height: 1.75; font-size: 14px; margin: 0 0 26px; }
+  .secondary-btn { margin-top: 12px; display: block; width: 100%; background: transparent; border: 0; color: #a16f83; font-size: 12px; padding: 10px; cursor: pointer; }
+  .confetti { position: fixed; z-index: 20; top: -14px; width: 8px; height: 12px; pointer-events: none; animation: confetti-fall var(--fall) linear forwards; }
+  @keyframes confetti-fall { to { transform: translate3d(var(--sway), 110vh, 0) rotate(760deg); opacity: 0; } }
+  @media (min-height: 800px) { .game-card { min-height: 390px; } }
+  @media (max-width: 560px) {
+    .topbar { padding: max(16px, env(safe-area-inset-top)) 17px 10px; }
+    .brand-mark { width: 37px; height: 37px; border-radius: 13px; }
+    .brand-name { font-size: 12px; } .brand-sub { font-size: 9px; }
+    .counter { padding: 9px 11px; font-size: 10px; }
+    main { padding: 12px 14px 20px; }
+    .hero { padding: 29px 3px 17px; }
+    .game-card { min-height: 350px; border-radius: 24px; margin-top: 10px; }
+    .card-top { inset: 17px 17px auto; font-size: 9px; }
+    .hint { font-size: 11px; bottom: 16px; }
+    footer { padding-top: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="ambient" id="ambient" aria-hidden="true"></div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">♥</div>
+      <div><div class="brand-name">A little something for Mekkunjii</div><div class="brand-sub">Made with all my heart</div></div>
+    </div>
+    <div class="counter" aria-live="polite"><strong id="counter">0</strong> <span>/ 101 found</span></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">A tiny universe, just for you ✦</div>
+      <h1>101 little reasons<br><span>you're my life.</span></h1>
+      <p class="intro">Some things are too lovely to fit into one message. Tap a floating heart and discover one little reason at a time.</p>
+    </section>
+    <section class="game-card" aria-label="Find the floating hearts">
+      <div class="card-top"><span><i class="live-dot"></i>Love notes, floating by</span><span id="remaining">101 still to find</span></div>
+      <div id="heart-field" aria-label="Floating hearts"></div>
+      <div class="hint">A little tap, a little love. <b>Catch a heart</b> to open a note.</div>
+    </section>
+    <div class="progress-wrap" aria-label="Discovery progress">
+      <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+      <div class="progress-label" id="progress-label">0% discovered</div>
+    </div>
+  </main>
+  <footer>A small reminder: you're loved in a hundred little ways — and more. ♡</footer>
+</div>
+
+<div class="overlay" id="reason-overlay" role="dialog" aria-modal="true" aria-labelledby="reason-heading" aria-hidden="true">
+  <div class="dialog">
+    <div class="sparkle" aria-hidden="true">✦ &nbsp; ♡ &nbsp; ✦</div>
+    <div class="reason-kicker" id="reason-heading">A little reason <span id="reason-number">01</span> of 101</div>
+    <p class="reason-text" id="reason-text"></p>
+    <button class="primary-btn" id="continue-btn">Keep finding love&nbsp; →</button>
+  </div>
+</div>
+
+<div class="overlay" id="final-overlay" role="dialog" aria-modal="true" aria-labelledby="final-heading" aria-hidden="true">
+  <div class="dialog">
+    <div class="final-heart" aria-hidden="true">💗</div>
+    <h2 class="final-title" id="final-heading">Every reason leads<br>back to you.</h2>
+    <p class="final-copy">You found all 101 little reasons, Mekkunjii. And somehow, even this list isn't big enough for everything that makes you special. Thank you for being exactly who you are. Always your Biblimon ♡</p>
+    <button class="primary-btn" id="replay-btn">Read them all again</button>
+    <button class="secondary-btn" id="close-final-btn">Stay here a little longer</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const reasons = ["Your beautiful smile","The way your eyes light up when you're happy","Your laugh that makes me smile too","The sound of your voice","The way you make ordinary moments feel special","Your kind heart","How caring you are toward the people you love","Your honesty","The way you listen to me","How you remember little things I tell you","Your sense of humor","The silly jokes we share","How you can cheer me up without even trying","The comfort I feel when I'm talking to you","The way you make me feel understood","Your patience with me","How you encourage me when I doubt myself","The way you believe in me","Your strength when things get difficult","How you keep going even on hard days","Your thoughtful little gestures","The way you check on me","How you notice when something is wrong","The warmth of your hugs","The way holding your hand feels natural","Your cute expressions","The way you get excited about things you love","Your passion for what matters to you","Your curiosity about the world","The way you share your thoughts with me","Your unique way of seeing things","How you make me laugh at the most random times","The little habits that make you unmistakably you","Your beautiful personality","The way you treat others with respect","Your compassion for people who need it","How you can be both strong and gentle","Your courage to be yourself","The way you stand up for what you believe in","Your creativity","Your intelligence","How much I can learn from you","The way you make conversations interesting","Your adorable excitement over small things","How you turn boring days into good memories","The memories we've already made together","The inside jokes only we understand","The little moments that become our favorite stories","The way time flies when we're together","How even silence feels comfortable with you","The way you make distance feel a little easier","Your messages that brighten my day","The happiness I feel when your name appears on my phone","The way you say my name","Your good-morning messages","Your good-night wishes","How you make me feel special without needing a big gesture","The way you celebrate my little wins","How you support me when I make mistakes","Your willingness to understand my side","The way we can learn and grow together","How you inspire me to be a better person","The way you remind me to take care of myself","Your trust in me","The trust I can place in you","How you respect my feelings","The way you share your feelings with me","Your openness to talking things through","How we can disagree and still care about each other","The way you make affection feel genuine","Your little acts of kindness","The way you make me feel welcome","How you bring calm to a stressful day","The excitement of making plans with you","The little adventures we get to share","The new things I discover about you","How you can surprise me in the sweetest ways","Your natural beauty","The way you look when you're focused on something","Your sleepy, cozy side","The way you dance or move when a favorite song comes on","Your taste in music, movies, or things you enjoy","The recommendations you share with me","The way you tell stories","How expressive your face is","The way you show love in your own way","How you make me feel appreciated","The way you make room for me in your life","Your independence and individuality","The dreams you're working toward","Your determination to reach your goals","How proud I feel when you accomplish something","The way you keep your own spark","The way you make me look forward to seeing you","How being with you can make a tough day feel lighter","The happiness in the little routines we share","The way you make love feel like friendship too","How safe I feel being myself around you","The way you make me excited about what we could build together","The fact that there's always something new to appreciate about you","Simply the person you are, in all the little ways that make you you"];
+  const colors = ["#f45f88", "#e94877", "#ff9ab5", "#c93265", "#d86aa0", "#f18aab"];
+  const field = document.getElementById("heart-field");
+  const ambient = document.getElementById("ambient");
+  const counter = document.getElementById("counter");
+  const remaining = document.getElementById("remaining");
+  const progress = document.getElementById("progress");
+  const progressLabel = document.getElementById("progress-label");
+  const reasonOverlay = document.getElementById("reason-overlay");
+  const finalOverlay = document.getElementById("final-overlay");
+  const reasonNumber = document.getElementById("reason-number");
+  const reasonText = document.getElementById("reason-text");
+  const continueBtn = document.getElementById("continue-btn");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let unseen = reasons.map((_, i) => i);
+  let found = 0;
+  let paused = false;
+  let spawnTimer = null;
+  let lastFocused = null;
+  let shownThisRound = null;
+
+  const heartSvg = '<svg viewBox="0 0 32 29.6" aria-hidden="true"><path fill="currentColor" d="M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 21.2 6.1-9.3 16-12.1 16-21.2C32 3.8 28.2 0 23.6 0z"/></svg>';
+  const rand = (min, max) => Math.random() * (max - min) + min;
+
+  function makeAmbient() {
+    if (reducedMotion) return;
+    for (let i = 0; i < 17; i++) {
+      const heart = document.createElement("span");
+      heart.className = "ambient-heart";
+      heart.innerHTML = heartSvg;
+      const size = rand(13, 39);
+      heart.style.width = `${size}px`;
+      heart.style.height = `${size}px`;
+      heart.style.left = `${rand(0, 100)}%`;
+      heart.style.color = colors[Math.floor(rand(0, colors.length))];
+      heart.style.animationDuration = `${rand(17, 34)}s`;
+      heart.style.animationDelay = `${-rand(0, 32)}s`;
+      ambient.appendChild(heart);
+    }
+  }
+
+  function updateProgress() {
+    const pct = Math.round((found / reasons.length) * 100);
+    counter.textContent = found;
+    remaining.textContent = `${reasons.length - found} ${reasons.length - found === 1 ? "still" : "still"} to find`;
+    progress.style.width = `${pct}%`;
+    progressLabel.textContent = `${pct}% discovered`;
+  }
+
+  function showReason(index) {
+    lastFocused = document.activeElement;
+    shownThisRound = index;
+    reasonNumber.textContent = String(found).padStart(2, "0");
+    reasonText.textContent = reasons[index];
+    reasonOverlay.classList.add("active");
+    reasonOverlay.setAttribute("aria-hidden", "false");
+    paused = true;
+    window.setTimeout(() => continueBtn.focus({ preventScroll: true }), 50);
+  }
+
+  function hideOverlay(overlay) {
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+  }
+
+  function catchHeart(heart) {
+    if (paused || heart.dataset.caught === "true" || unseen.length === 0) return;
+    heart.dataset.caught = "true";
+    heart.classList.add("popping");
+    const pick = Math.floor(Math.random() * unseen.length);
+    const index = unseen.splice(pick, 1)[0];
+    found += 1;
+    updateProgress();
+    window.setTimeout(() => heart.remove(), 280);
+    showReason(index);
+  }
+
+  function spawnHeart() {
+    if (paused || document.hidden || unseen.length === 0 || field.childElementCount >= 9) return;
+    const heart = document.createElement("button");
+    heart.type = "button";
+    heart.className = "game-heart";
+    heart.setAttribute("aria-label", "Open a love note");
+    heart.innerHTML = heartSvg;
+    const size = rand(38, 67);
+    heart.style.width = `${size}px`;
+    heart.style.height = `${size}px`;
+    heart.style.left = `${rand(5, Math.max(6, field.clientWidth - size - 5))}px`;
+    heart.style.bottom = `${rand(-20, 8)}px`;
+    heart.style.setProperty("--heart-color", colors[Math.floor(rand(0, colors.length))]);
+    heart.style.setProperty("--rot", `${rand(-24, 24)}deg`);
+    heart.style.setProperty("--duration", `${reducedMotion ? 8 : rand(6.5, 10)}s`);
+    heart.addEventListener("click", () => catchHeart(heart), { once: true });
+    heart.addEventListener("animationend", () => heart.remove(), { once: true });
+    field.appendChild(heart);
+  }
+
+  function createConfetti() {
+    if (reducedMotion) return;
+    for (let i = 0; i < 85; i++) {
+      const piece = document.createElement("span");
+      piece.className = "confetti";
+      piece.style.left = `${rand(0, 100)}vw`;
+      piece.style.background = colors[Math.floor(rand(0, colors.length))];
+      piece.style.borderRadius = Math.random() > .5 ? "50%" : "2px";
+      piece.style.setProperty("--fall", `${rand(2.6, 5.2)}s`);
+      piece.style.setProperty("--sway", `${rand(-100, 100)}px`);
+      piece.style.animationDelay = `${rand(0, .8)}s`;
+      document.body.appendChild(piece);
+      piece.addEventListener("animationend", () => piece.remove(), { once: true });
+    }
+  }
+
+  function finish() {
+    paused = true;
+    hideOverlay(reasonOverlay);
+    finalOverlay.classList.add("active");
+    finalOverlay.setAttribute("aria-hidden", "false");
+    document.getElementById("replay-btn").focus({ preventScroll: true });
+    createConfetti();
+  }
+
+  function resume() {
+    hideOverlay(reasonOverlay);
+    if (found >= reasons.length) {
+      finish();
+      return;
+    }
+    paused = false;
+    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus({ preventScroll: true });
+    spawnHeart();
+  }
+
+  function replay() {
+    unseen = reasons.map((_, i) => i);
+    found = 0;
+    shownThisRound = null;
+    updateProgress();
+    field.replaceChildren();
+    document.querySelectorAll(".confetti").forEach(el => el.remove());
+    hideOverlay(finalOverlay);
+    paused = false;
+    for (let i = 0; i < 4; i++) window.setTimeout(spawnHeart, i * 260);
+  }
+
+  continueBtn.addEventListener("click", resume);
+  document.getElementById("replay-btn").addEventListener("click", replay);
+  document.getElementById("close-final-btn").addEventListener("click", () => {
+    hideOverlay(finalOverlay);
+    paused = false;
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && reasonOverlay.classList.contains("active")) resume();
+    if (event.key === "Escape" && finalOverlay.classList.contains("active")) {
+      hideOverlay(finalOverlay);
+      paused = false;
+    }
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && spawnTimer) window.clearInterval(spawnTimer);
+    else if (!document.hidden && !spawnTimer) startSpawner();
+  });
+  function startSpawner() {
+    if (spawnTimer) window.clearInterval(spawnTimer);
+    spawnTimer = window.setInterval(() => {
+      if (Math.random() > .18) spawnHeart();
+    }, reducedMotion ? 1800 : 850);
+  }
+
+  makeAmbient();
+  updateProgress();
+  for (let i = 0; i < 4; i++) window.setTimeout(spawnHeart, i * 350);
+  startSpawner();
+})();
+</script>
+</body>
+</html>
